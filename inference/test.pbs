@@ -1,0 +1,93 @@
+#!/bin/bash
+#PBS -N sr_test
+#PBS -q gpu
+#PBS -l select=1:ncpus=4:ngpus=1:mem=16gb
+#PBS -l walltime=02:00:00
+#PBS -V
+#PBS -j oe
+
+set -e
+
+# ==============================
+# PATH SETUP
+# ==============================
+
+PROJECT_ROOT="/home/$USER/Minor_Satellite_SR_Nimit_Rachit_Dhananjay"
+cd $PROJECT_ROOT || exit 1
+
+EXP_NAME="run_150_epochs"
+EXP_DIR="$PROJECT_ROOT/experiments/$EXP_NAME"
+
+LOG_FILE="$PROJECT_ROOT/logs/sr_test_${PBS_JOBID}.log"
+
+mkdir -p "$PROJECT_ROOT/logs"
+exec > "$LOG_FILE" 2>&1
+
+echo "===== TEST STARTED ====="
+echo "Time: $(date)"
+echo "Node: $(hostname)"
+echo "Working dir: $(pwd)"
+
+# ==============================
+# LOAD ENV
+# ==============================
+
+source /home/soft/anaconda3/etc/profile.d/conda.sh
+conda activate sr_env
+
+export PYTHONNOUSERSITE=1
+
+module load cuda
+export PYTHONPATH=$PROJECT_ROOT
+
+# ==============================
+# DEBUG TORCH
+# ==============================
+
+echo "===== PYTORCH CHECK ====="
+python -c "import torch; print('Torch:', torch.__version__); print('CUDA:', torch.version.cuda); print('Available:', torch.cuda.is_available())"
+echo "========================="
+
+# ==============================
+# GPU INFO
+# ==============================
+
+echo "===== GPU INFO ====="
+nvidia-smi
+echo "===================="
+
+# ==============================
+# CHECK MODEL
+# ==============================
+
+MODEL_PATH="$EXP_DIR/checkpoints/best_model.pth"
+
+if [ ! -f "$MODEL_PATH" ]; then
+    echo "❌ Model not found: $MODEL_PATH"
+    exit 1
+fi
+
+echo "Using model: $MODEL_PATH"
+
+# ==============================
+# RUN TEST
+# ==============================
+
+echo "Running inference..."
+
+python -u inference/test_150.py \
+    --exp-name $EXP_NAME \
+    --model-path "$MODEL_PATH"
+
+echo "===== TEST COMPLETED ====="
+
+# ==============================
+# VERIFY OUTPUT
+# ==============================
+
+RESULT_DIR="$EXP_DIR/results"
+
+echo "Checking generated images in:"
+echo "$RESULT_DIR"
+
+find "$RESULT_DIR" -name "*.png" | head -20 || echo "No images found"

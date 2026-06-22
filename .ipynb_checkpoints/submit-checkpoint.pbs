@@ -1,0 +1,26 @@
+#!/bin/bash
+#PBS -N python_job
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=01:00:00
+#PBS -q default
+#PBS -o output.log
+#PBS -e error.log
+#PBS -V
+
+# Change to the directory from which the job was submitted
+cd $PBS_O_WORKDIR
+
+# Load conda and activate environment
+source ~/miniconda3/etc/profile.d/conda.sh 2>/dev/null || source ~/anaconda3/etc/profile.d/conda.sh 2>/dev/null
+conda activate minor_Nimit
+
+# Run the Python script passed as variable
+if [ -z "$PYTHON_SCRIPT" ]; then
+    echo "Error: No Python script specified"
+    exit 1
+fi
+
+echo "Running: $PYTHON_SCRIPT"
+echo "Start time: $(date)"
+python "$PYTHON_SCRIPT"
+echo "End time: $(date)"

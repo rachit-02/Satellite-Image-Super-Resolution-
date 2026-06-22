@@ -1,0 +1,74 @@
+===== TEST STARTED =====
+Wed Apr 22 12:16:03 PM IST 2026
+Wed Apr 22 12:16:05 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.124.06             Driver Version: 570.124.06     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          Off |   00000000:0A:00.0 Off |                    0 |
+| N/A   66C    P0            500W /  700W |   56833MiB /  81559MiB |     99%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          Off |   00000000:18:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          Off |   00000000:3B:00.0 Off |                    0 |
+| N/A   30C    P0             71W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          Off |   00000000:44:00.0 Off |                    0 |
+| N/A   34C    P0             69W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA H100 80GB HBM3          Off |   00000000:87:00.0 Off |                    0 |
+| N/A   33C    P0             73W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA H100 80GB HBM3          Off |   00000000:90:00.0 Off |                    0 |
+| N/A   30C    P0             70W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA H100 80GB HBM3          Off |   00000000:B9:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA H100 80GB HBM3          Off |   00000000:C2:00.0 Off |                    0 |
+| N/A   34C    P0             69W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         2275878      C   python3                               38888MiB |
+|    0   N/A  N/A         2535687      C   ...envs/minor-project/bin/python      17926MiB |
++-----------------------------------------------------------------------------------------+
+Running test...
+/home/soft/anaconda3/envs/pytorch-gpu/lib/python3.10/site-packages/torch/cuda/__init__.py:145: UserWarning: 
+NVIDIA H100 80GB HBM3 with CUDA capability sm_90 is not compatible with the current PyTorch installation.
+The current PyTorch install supports CUDA capabilities sm_35 sm_50 sm_60 sm_61 sm_70 sm_75 sm_80 sm_86 compute_50.
+If you want to use the NVIDIA H100 80GB HBM3 GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/
+
+  warnings.warn(incompatible_device_warn.format(device_name, capability, " ".join(arch_list), device_name))
+🚀 Running inference on: cuda
+GPU: NVIDIA H100 80GB HBM3
+✅ Loaded raw model weights
+🧪 Total TEST samples: 2190
+📊 Final dataset size: 2190
+
+🔍 Running inference...
+
+Traceback (most recent call last):
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/inference/test.py", line 110, in <module>
+    test()
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/inference/test.py", line 75, in test
+    p = psnr(sr, hr).item()
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/utils/metrics.py", line 6, in psnr
+    sr = sr.astype(np.float32)
+AttributeError: 'Tensor' object has no attribute 'astype'. Did you mean: 'dtype'?

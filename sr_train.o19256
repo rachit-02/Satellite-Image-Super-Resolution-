@@ -1,0 +1,9 @@
+Running training on GPU...
+Working directory: /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+Python path: /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+Traceback (most recent call last):
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/training/train.py", line 8, in <module>
+    from models.cga import CGA
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/models/cga.py", line 6, in <module>
+    from models.cga import CGA
+ImportError: cannot import name 'CGA' from partially initialized module 'models.cga' (most likely due to a circular import) (/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/models/cga.py)

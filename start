@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Start script for Satellite Super-Resolution Project
+# Usage: source ./start  (or source ~/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/start)
+# This script activates the conda environment and navigates to the project folder
+
+# Check if conda is already initialized
+if ! command -v conda &> /dev/null; then
+    # Source conda initialization
+    source /home/soft/anaconda3/etc/profile.d/conda.sh
+fi
+
+# Activate the conda environment
+conda activate minor_Nimit
+
+# Navigate to the project directory
+cd /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+
+# Display welcome message
+echo ""
+echo "=========================================="
+echo "Satellite SR Project Environment Started"
+echo "=========================================="
+echo "✓ Environment: minor_Nimit"
+echo "✓ Directory: $(pwd)"
+echo "✓ Python: $(python3 --version)"
+echo "✓ Packages ready: numpy, scipy, matplotlib,"
+echo "               scikit-image, opencv, PyTorch"
+echo "=========================================="
+echo ""

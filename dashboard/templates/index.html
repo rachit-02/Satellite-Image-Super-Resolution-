@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Super-Resolution Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Premium Navigation Bar -->
+    <nav class="navbar navbar-dark sticky-top shadow-lg">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center gap-3 w-100">
+                <span class="navbar-brand mb-0 h1">
+                    <i class="fas fa-satellite me-2"></i>
+                    <span class="brand-text">Satellite Super-Resolution</span>
+                </span>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="status-badge">
+                        <span class="badge bg-success"><i class="fas fa-circle me-1"></i>Live</span>
+                    </div>
+                    <small id="lastUpdate" class="text-white-50">Last updated: --</small>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-menu">
+                <a href="#metrics" class="menu-item active" data-section="metrics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Metrics</span>
+                </a>
+                <a href="#gallery" class="menu-item" data-section="gallery">
+                    <i class="fas fa-images"></i>
+                    <span>Gallery</span>
+                </a>
+                <a href="#analysis" class="menu-item" data-section="analysis">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analysis</span>
+                </a>
+                <a href="#comparison" class="menu-item" data-section="comparison">
+                    <i class="fas fa-code-compare"></i>
+                    <span>Compare</span>
+                </a>
+                <a href="#settings" class="menu-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Metrics Section -->
+            <section id="metrics" class="dashboard-section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line me-2"></i>Performance Metrics</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-sm btn-outline-primary" title="Refresh">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" title="Export">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <!-- PSNR Card -->
+                    <div class="kpi-card premium-card">
+                        <div class="card-header">
+                            <h5>Peak Signal-to-Noise Ratio</h5>
+                            <span class="badge bg-info">dB</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="metric-display">
+                                <div class="metric-icon psnr-icon">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="psnrValue">27.56</div>
+                                    <small class="text-muted">Higher is better</small>
+                                </div>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="progress-bar" id="psnrBar" style="width: 65%"></div>
+                            </div>
+                            <span class="metric-label">PSNR</span>
+                        </div>
+                    </div>
+
+                    <!-- SSIM Card -->
+                    <div class="kpi-card premium-card">
+                        <div class="card-header">
+                            <h5>Structural Similarity</h5>
+                            <span class="badge bg-success">Index</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="metric-display">
+                                <div class="metric-icon ssim-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="ssimValue">0.7365</div>
+                                    <small class="text-muted">0 to 1 scale</small>
+                                </div>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="progress-bar-success" id="ssimBar" style="width: 73.65%"></div>
+                            </div>
+                            <span class="metric-label">SSIM</span>
+                        </div>
+                    </div>
+
+                    <!-- Images Card -->
+                    <div class="kpi-card premium-card">
+                        <div class="card-header">
+                            <h5>Total Results</h5>
+                            <span class="badge bg-warning">Count</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="metric-display">
+                                <div class="metric-icon images-icon">
+                                    <i class="fas fa-images"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="totalImages">2190</div>
+                                    <small class="text-muted">Generated results</small>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <span>SR Images</span>
+                                <span id="srCount" class="fw-bold">50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Model Card -->
+                    <div class="kpi-card premium-card">
+                        <div class="card-header">
+                            <h5>Model Info</h5>
+                            <span class="badge bg-purple">CGA</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="model-info">
+                                <div class="model-name">CGA Model</div>
+                                <div class="model-details">
+                                    <small>Channel-wise Gated Attention</small>
+                                </div>
+                                <div class="model-specs">
+                                    <span class="spec-item"><strong>4x</strong> Scale</span>
+                                    <span class="spec-item"><strong>Satellite</strong> Images</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Grid -->
+                <div class="stats-section">
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-file-image"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">LR Images</div>
+                                <div class="stat-value" id="lrCount">50</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-rocket"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">SR Output</div>
+                                <div class="stat-value" id="srStatCount">50</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-crown"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">HR Ground Truth</div>
+                                <div class="stat-value" id="hrCount">50</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-label">Comparisons</div>
+                                <div class="stat-value" id="compareCount">50</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Section -->
+            <section id="gallery" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-images me-2"></i>Result Gallery</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-sm btn-outline-primary" id="fullscreenBtn">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" id="downloadBtn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Gallery Controls -->
+                <div class="gallery-toolbar">
+                    <div class="toolbar-left">
+                        <button class="btn btn-control" id="prevBtn"><i class="fas fa-chevron-left"></i> Previous</button>
+                        <div class="image-selector">
+                            <input type="number" class="form-control" id="imageIndex" min="0" placeholder="Go to image #">
+                            <button class="btn btn-control" id="goBtn">Go</button>
+                        </div>
+                        <button class="btn btn-control" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="toolbar-right">
+                        <span class="image-counter" id="imageCounter">Image 0 of 0</span>
+                    </div>
+                </div>
+
+                <!-- Image Viewer -->
+                <div class="gallery-viewer">
+                    <div class="viewer-grid">
+                        <div class="viewer-item">
+                            <div class="viewer-label">Low-Resolution Input</div>
+                            <img id="lrImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='300'%3E%3Crect fill='%23f0f0f0' width='100%25' height='100%25'/%3E%3C/svg%3E" alt="LR">
+                        </div>
+                        <div class="viewer-item">
+                            <div class="viewer-label">Our Super-Resolution Output</div>
+                            <img id="srImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='300'%3E%3Crect fill='%23f0f0f0' width='100%25' height='100%25'/%3E%3C/svg%3E" alt="SR">
+                        </div>
+                        <div class="viewer-item">
+                            <div class="viewer-label">Ground Truth HR</div>
+                            <img id="hrImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='300'%3E%3Crect fill='%23f0f0f0' width='100%25' height='100%25'/%3E%3C/svg%3E" alt="HR">
+                        </div>
+                        <div class="viewer-item full-width">
+                            <div class="viewer-label">Side-by-Side Comparison</div>
+                            <img id="compareImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='300'%3E%3Crect fill='%23f0f0f0' width='100%25' height='100%25'/%3E%3C/svg%3E" alt="Compare">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section id="analysis" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar me-2"></i>Performance Analysis</h2>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h5>Metric Distribution</h5>
+                        <canvas id="metricsChart"></canvas>
+                    </div>
+                    <div class="analysis-card">
+                        <h5>Quality Breakdown</h5>
+                        <div class="quality-stats">
+                            <div class="quality-item">
+                                <div class="quality-label">Excellent</div>
+                                <div class="quality-bar"><div class="quality-fill" style="width: 45%"></div></div>
+                                <small>45%</small>
+                            </div>
+                            <div class="quality-item">
+                                <div class="quality-label">Good</div>
+                                <div class="quality-bar"><div class="quality-fill" style="width: 35%"></div></div>
+                                <small>35%</small>
+                            </div>
+                            <div class="quality-item">
+                                <div class="quality-label">Fair</div>
+                                <div class="quality-bar"><div class="quality-fill" style="width: 20%"></div></div>
+                                <small>20%</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparison Section -->
+            <section id="comparison" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-code-compare me-2"></i>Model Comparison</h2>
+                </div>
+
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                                <th>Benchmark</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>PSNR</strong></td>
+                                <td id="compPsnr">27.56 dB</td>
+                                <td>25.00 dB</td>
+                                <td><span class="badge bg-success">Better</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>SSIM</strong></td>
+                                <td id="compSsim">0.7365</td>
+                                <td>0.7200</td>
+                                <td><span class="badge bg-success">Better</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Images</strong></td>
+                                <td id="compImages">2190</td>
+                                <td>2000</td>
+                                <td><span class="badge bg-success">More</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog me-2"></i>Settings & Export</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h5>Dashboard Settings</h5>
+                        <div class="setting-item">
+                            <label>Auto-Refresh Interval</label>
+                            <select class="form-select" id="refreshInterval">
+                                <option value="10">10 seconds</option>
+                                <option value="30" selected>30 seconds</option>
+                                <option value="60">1 minute</option>
+                                <option value="300">5 minutes</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="darkMode"> Dark Mode
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="soundNotif"> Sound Notifications
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h5>Export & Download</h5>
+                        <button class="btn btn-export">
+                            <i class="fas fa-file-csv me-2"></i>Export as CSV
+                        </button>
+                        <button class="btn btn-export">
+                            <i class="fas fa-file-pdf me-2"></i>Export as PDF
+                        </button>
+                        <button class="btn btn-export">
+                            <i class="fas fa-image me-2"></i>Download Images
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

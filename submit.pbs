@@ -1,0 +1,25 @@
+#PBS -N sr_train
+#PBS -q gpu
+#PBS -l select=1:ncpus=4:ngpus=1:mem=16gb
+#PBS -l walltime=01:00:00
+#PBS -j oe
+
+cd $PBS_O_WORKDIR
+
+# Ensure project root is visible to Python
+export PYTHONPATH=$PWD
+
+# (Optional but recommended) activate your environment
+# Uncomment if you are using venv/conda
+# source ~/env/bin/activate
+# or
+# conda activate your_env_name
+
+# Create logs folder for future (optional)
+mkdir -p logs
+
+echo "Running training on GPU..."
+echo "Working directory: $PWD"
+echo "Python path: $PYTHONPATH"
+
+python training/train.py

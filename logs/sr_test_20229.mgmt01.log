@@ -1,0 +1,97 @@
+===== TEST STARTED =====
+Time: Wed Apr 22 03:23:46 PM IST 2026
+Node: gpu02
+Working dir: /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+===== PYTORCH CHECK =====
+Torch: 2.5.1+cu121
+CUDA: 12.1
+Available: True
+=========================
+===== GPU INFO =====
+Wed Apr 22 15:23:51 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.124.06             Driver Version: 570.124.06     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          Off |   00000000:0A:00.0 Off |                    0 |
+| N/A   47C    P0            261W /  700W |   59174MiB /  81559MiB |     59%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          Off |   00000000:18:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          Off |   00000000:3B:00.0 Off |                    0 |
+| N/A   30C    P0             71W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          Off |   00000000:44:00.0 Off |                    0 |
+| N/A   33C    P0             73W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA H100 80GB HBM3          Off |   00000000:87:00.0 Off |                    0 |
+| N/A   49C    P0            229W /  700W |   79810MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA H100 80GB HBM3          Off |   00000000:90:00.0 Off |                    0 |
+| N/A   40C    P0            224W /  700W |   79810MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA H100 80GB HBM3          Off |   00000000:B9:00.0 Off |                    0 |
+| N/A   39C    P0            222W /  700W |   79812MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA H100 80GB HBM3          Off |   00000000:C2:00.0 Off |                    0 |
+| N/A   50C    P0            233W /  700W |   79756MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         2151178      C   python3                                1798MiB |
+|    0   N/A  N/A         3074599      C   python3                                3088MiB |
+|    0   N/A  N/A         3801339      C   ...ics_nli/.conda-env/bin/python      35942MiB |
+|    0   N/A  N/A         3923828      C   ...ics_nli/.conda-env/bin/python      18316MiB |
+|    4   N/A  N/A         1871619      C   VLLM::Worker_TP0_EP0                  79646MiB |
+|    5   N/A  N/A         1871620      C   VLLM::Worker_TP1_EP1                  79646MiB |
+|    6   N/A  N/A         1871621      C   VLLM::Worker_TP2_EP2                  79646MiB |
+|    7   N/A  N/A         1871622      C   VLLM::Worker_TP3_EP3                  79644MiB |
++-----------------------------------------------------------------------------------------+
+====================
+Checking test.py...
+-rwxr-xr-x 1 sushil.ghildiyal sushil.ghildiyal 5087 Apr 22  2026 inference/test.py
+Running test...
+🚀 Running inference on: cuda
+GPU: NVIDIA H100 80GB HBM3
+🔍 Loading model...
+📂 Using model: checkpoints/best_model.pth
+/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/inference/test.py:46: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(model_path, map_location=device)
+✅ Model loaded
+🔍 Creating dataloader...
+🧪 Total TEST samples: 2190
+📊 Final dataset size: 2190
+DEBUG: Dataloader created
+Length of test_loader: 2190
+
+🔍 Running inference...
+
+[0] PSNR: 21.86, SSIM: 0.5314
+❌ FATAL ERROR: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 150 and the array at index 1 has size 600
+Traceback (most recent call last):
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/inference/test.py", line 140, in test
+    combined = np.hstack([lr_img, sr_img, hr_img])
+  File "/home/sushil.ghildiyal/.conda/envs/sr_env/lib/python3.10/site-packages/numpy/_core/shape_base.py", line 367, in hstack
+    return _nx.concatenate(arrs, 1, dtype=dtype, casting=casting)
+ValueError: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 150 and the array at index 1 has size 600
+===== TEST COMPLETED =====
+Generated images:
+results/hr/hr_0000.png
+results/sr/sr_0000.png
+results/lr/lr_0000.png

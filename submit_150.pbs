@@ -1,0 +1,135 @@
+#!/bin/bash
+#PBS -N sr_train_150
+#PBS -q gpu
+#PBS -l select=1:ncpus=8:ngpus=1:mem=32gb
+#PBS -l walltime=48:00:00
+#PBS -V
+#PBS -j oe
+#PBS -o /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/logs/sr_train_150.log
+
+set -e
+
+# ==============================
+# PATH SETUP
+# ==============================
+
+PROJECT_ROOT="/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay"
+EXP_NAME="run_150_epochs"
+EXP_DIR="$PROJECT_ROOT/experiments/$EXP_NAME"
+
+cd $PROJECT_ROOT
+
+CHECKPOINT="$EXP_DIR/checkpoints/last_model.pth"
+DONE_FLAG="$EXP_DIR/training_done.txt"
+COUNT_FILE="$EXP_DIR/resubmit_count.txt"
+MAX_RESUBMIT=5
+
+echo "========================================================="
+echo "SR Training 150 Started"
+echo "Time: $(date)"
+echo "Node: $(hostname)"
+echo "========================================================="
+
+echo "Working directory: $(pwd)"
+echo "Python path: $(which python)"
+
+# ==============================
+# LOAD CLUSTER ENV
+# ==============================
+
+source /home/soft/anaconda3/etc/profile.d/conda.sh
+conda activate pytorch-gpu
+
+module load cuda
+
+export PYTHONPATH=$PROJECT_ROOT
+
+# ==============================
+# GPU INFO
+# ==============================
+
+echo "========== GPU INFO =========="
+nvidia-smi
+echo "=============================="
+
+# ==============================
+# CREATE DIRS
+# ==============================
+
+mkdir -p "$PROJECT_ROOT/logs"
+mkdir -p "$EXP_DIR/checkpoints"
+mkdir -p "$EXP_DIR/results/lr"
+mkdir -p "$EXP_DIR/results/sr"
+mkdir -p "$EXP_DIR/results/hr"
+mkdir -p "$EXP_DIR/results/compare"
+mkdir -p "$EXP_DIR/logs"
+
+# ==============================
+# STOP IF ALREADY DONE
+# ==============================
+
+if [ -f "$DONE_FLAG" ]; then
+    echo "Training already completed"
+    exit 0
+fi
+
+# ==============================
+# TRAINING
+# ==============================
+
+echo "Starting training..."
+
+if [ -f "$CHECKPOINT" ]; then
+    echo "Resuming from checkpoint..."
+    python training/train_150.py --exp-name "$EXP_NAME" --resume "$CHECKPOINT"
+else
+    echo "Starting fresh..."
+    python training/train_150.py --exp-name "$EXP_NAME"
+fi
+
+# ==============================
+# POST-TRAIN CHECK
+# ==============================
+
+echo "========================================================="
+echo "Training process finished at: $(date)"
+echo "========================================================="
+
+echo "Checkpoint exists: $( [ -f "$CHECKPOINT" ] && echo YES || echo NO )"
+echo "Done flag exists: $( [ -f "$DONE_FLAG" ] && echo YES || echo NO )"
+
+# ==============================
+# IF TRAINING COMPLETED
+# ==============================
+
+if [ -f "$DONE_FLAG" ]; then
+    echo "Training fully completed!"
+    echo "No resubmission needed."
+    exit 0
+fi
+
+# ==============================
+# SAFE AUTO RESUBMIT
+# ==============================
+
+if [ ! -f "$COUNT_FILE" ]; then
+    echo 0 > "$COUNT_FILE"
+fi
+
+COUNT=$(cat "$COUNT_FILE")
+
+if [ "$COUNT" -ge "$MAX_RESUBMIT" ]; then
+    echo "Max resubmit limit reached"
+    exit 0
+fi
+
+COUNT=$((COUNT+1))
+echo "$COUNT" > "$COUNT_FILE"
+
+echo "Training not finished yet"
+echo "Resubmitting job (Attempt $COUNT/$MAX_RESUBMIT)..."
+
+qsub "$0"
+
+echo "Job resubmitted successfully"
+exit 0

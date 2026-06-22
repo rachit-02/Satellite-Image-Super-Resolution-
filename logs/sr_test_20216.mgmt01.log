@@ -1,0 +1,73 @@
+===== TEST STARTED =====
+Time: Wed Apr 22 02:57:09 PM IST 2026
+Node: gpu02
+Working dir: /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+===== PYTORCH CHECK =====
+Torch: 2.5.1+cu121
+CUDA: 12.1
+Available: True
+=========================
+===== GPU INFO =====
+Wed Apr 22 14:57:23 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.124.06             Driver Version: 570.124.06     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          Off |   00000000:0A:00.0 Off |                    0 |
+| N/A   58C    P0            414W /  700W |   59174MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          Off |   00000000:18:00.0 Off |                    0 |
+| N/A   27C    P0             70W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          Off |   00000000:3B:00.0 Off |                    0 |
+| N/A   28C    P0             71W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          Off |   00000000:44:00.0 Off |                    0 |
+| N/A   40C    P0             76W /  700W |       4MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA H100 80GB HBM3          Off |   00000000:87:00.0 Off |                    0 |
+| N/A   51C    P0            274W /  700W |   79810MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA H100 80GB HBM3          Off |   00000000:90:00.0 Off |                    0 |
+| N/A   41C    P0            258W /  700W |   79810MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA H100 80GB HBM3          Off |   00000000:B9:00.0 Off |                    0 |
+| N/A   40C    P0            257W /  700W |   79812MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA H100 80GB HBM3          Off |   00000000:C2:00.0 Off |                    0 |
+| N/A   51C    P0            271W /  700W |   79756MiB /  81559MiB |    100%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         2151178      C   python3                                1798MiB |
+|    0   N/A  N/A         3074599      C   python3                                3088MiB |
+|    0   N/A  N/A         3801339      C   ...ics_nli/.conda-env/bin/python      35942MiB |
+|    0   N/A  N/A         3923828      C   ...ics_nli/.conda-env/bin/python      18316MiB |
+|    4   N/A  N/A         1871619      C   VLLM::Worker_TP0_EP0                  79646MiB |
+|    5   N/A  N/A         1871620      C   VLLM::Worker_TP1_EP1                  79646MiB |
+|    6   N/A  N/A         1871621      C   VLLM::Worker_TP2_EP2                  79646MiB |
+|    7   N/A  N/A         1871622      C   VLLM::Worker_TP3_EP3                  79644MiB |
++-----------------------------------------------------------------------------------------+
+====================
+Checking test.py...
+-rwxr-xr-x 1 sushil.ghildiyal sushil.ghildiyal 4603 Apr 22 14:33 inference/test.py
+Running test...
+Traceback (most recent call last):
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/inference/test.py", line 3, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'

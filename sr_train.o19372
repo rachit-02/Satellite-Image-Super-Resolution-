@@ -1,0 +1,33 @@
+Running training on GPU...
+Working directory: /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+Python path: /home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay
+🚀 Training started
+Using device: cuda
+GPU: NVIDIA H100 80GB HBM3
+/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/networkx/utils/backends.py:135: RuntimeWarning: networkx backend defined more than once: nx-loopback
+  backends.update(_get_backends("networkx.backends"))
+/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/training/train.py:62: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler()
+libpng error: Read Error
+📦 AID train files: 8181
+✅ Total LR-HR pairs: 4090
+⚠️ Corrupted image skipped: data/raw/AID/train/HR/mountain_157.png
+/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/training/train.py:95: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast():
+/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/torch/nn/modules/loss.py:128: UserWarning: Using a target size (torch.Size([8, 3, 600, 600])) that is different to the input size (torch.Size([8, 3, 150, 150])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.l1_loss(input, target, reduction=self.reduction)
+❌ ERROR: The size of tensor a (150) must match the size of tensor b (600) at non-singleton dimension 3
+Traceback (most recent call last):
+  File "/home/sushil.ghildiyal/Minor_Satellite_SR_Nimit_Rachit_Dhananjay/training/train.py", line 97, in train
+    loss = criterion(sr, hr)
+  File "/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/torch/nn/modules/loss.py", line 128, in forward
+    return F.l1_loss(input, target, reduction=self.reduction)
+  File "/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/torch/nn/functional.py", line 3810, in l1_loss
+    expanded_input, expanded_target = torch.broadcast_tensors(input, target)
+  File "/home/sushil.ghildiyal/.local/lib/python3.9/site-packages/torch/functional.py", line 77, in broadcast_tensors
+    return _VF.broadcast_tensors(tensors)  # type: ignore[attr-defined]
+RuntimeError: The size of tensor a (150) must match the size of tensor b (600) at non-singleton dimension 3
