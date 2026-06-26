@@ -388,13 +388,3 @@ If you use this work, please cite:
 ## 📄 License
 
 Released under the [MIT License](LICENSE).
-
----
-
-<div align="center">
-
-**⭐ If this work helped you, please consider starring the repo!**
-
-[🌐 Live Demo](https://satellite-image-super-resolution.onrender.com/) · [🐛 Report Bug](https://github.com/mwaleedaslam/CGA/issues) · [💡 Request Feature](https://github.com/mwaleedaslam/CGA/issues)
-
-</div>
