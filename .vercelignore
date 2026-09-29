@@ -1,0 +1,20 @@
+# Keep the serverless bundle small: only dashboard/ and results/ are needed at runtime.
+.venv/
+**/venv/
+**/__pycache__/
+**/*.pyc
+.ipynb_checkpoints/
+checkpoints/
+logs/
+experiments/
+training/
+inference/
+models/
+configs/
+scripts/
+utils/
+*.pdf
+*.tar.gz
+*.pbs
+sr_train.o*
+sr_test.o*

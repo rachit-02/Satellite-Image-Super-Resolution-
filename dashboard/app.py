@@ -8,11 +8,16 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-app = Flask(__name__, template_folder='templates', static_folder='static')
-
-# Project paths
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Project paths (absolute, so the app works regardless of the working directory)
+DASHBOARD_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = str(DASHBOARD_DIR.parent)
 RESULTS_DIR = os.path.join(PROJECT_ROOT, 'results')
+
+app = Flask(
+    __name__,
+    template_folder=str(DASHBOARD_DIR / 'templates'),
+    static_folder=str(DASHBOARD_DIR / 'static'),
+)
 
 
 def _list_png_files(category):
